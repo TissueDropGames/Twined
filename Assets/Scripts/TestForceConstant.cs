@@ -27,13 +27,13 @@ public class TestForceConstant : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-        
-	}
+	    Vector2 TowardsOther = transform.position - OtherEntity.transform.position;
+	    TowardsOther.Normalize();
+	    RB.AddForce(TowardsOther * fConstantForce);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Vector2 TowardsOther = transform.position - OtherEntity.transform.position;
-        TowardsOther.Normalize();
-        RB.AddForce(TowardsOther * fConstantForce);
+        
     }
 }
