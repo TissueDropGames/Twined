@@ -39,6 +39,11 @@ public class TetherLink : MonoBehaviour
             transform.localScale = new Vector3(i, i, 0);
             yield return null;
         }
+
+        List<GameObject> tmp = GameObject.Find("Tether").GetComponent<TetherManager>().GetLinkList();
+        tmp[tmp.IndexOf(gameObject) + 1].GetComponent<HingeJoint2D>().connectedBody = tmp[tmp.IndexOf(gameObject)-1].GetComponent<Rigidbody2D>();
+        tmp.Remove(gameObject);
+        GameObject.Find("Tether").GetComponent<TetherManager>().SetLinkList(tmp);
         Destroy(gameObject);
     }
 }

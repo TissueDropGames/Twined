@@ -18,7 +18,7 @@ public class TetherManager : MonoBehaviour
 
     private float fLinkDiamater;
 
-    private int iLinkQuantity = 0;
+    public int iLinkQuantity = 0;
 
     // Use this for initialization
     void Start ()
@@ -34,8 +34,9 @@ public class TetherManager : MonoBehaviour
     // Update is called once per frame
     void Update ()
 	{
+	    
 
-	    if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
 	    {
             RemoveLink();
 	    }
@@ -44,24 +45,7 @@ public class TetherManager : MonoBehaviour
 	    {
             CreateLink(1);
 	    }
-
-        // need to be refactored but works for now removes block from the middle
-	    for (int i = 0; i < a_goTetherLinks.Count; i++)
-	    {
-	        if (a_goTetherLinks[i] == null)
-	        {
-	            a_goTetherLinks.Remove(a_goTetherLinks[i]);
-	            iLinkQuantity--;
-            }
-            if (a_goTetherLinks[i].GetComponent<HingeJoint2D>().connectedBody == null)
-	        {
-	            a_goTetherLinks[i].GetComponent<HingeJoint2D>().connectedBody = a_goTetherLinks[i-1].GetComponent<Rigidbody2D>();
-	            a_goTetherLinks[i].GetComponent<HingeJoint2D>().connectedAnchor = new Vector3(fLinkDistance, 0, 0);
-            }
-
-        }
-	   
-        TetherRenderer();
+	    TetherRenderer();
     }
 
     public void CreateLink(int p_iLinkQuantity)
@@ -118,18 +102,22 @@ public class TetherManager : MonoBehaviour
             {
                 a_goTetherLinks[a_goTetherLinks.Count / 2].GetComponent<TetherLink>().StartTetherLinkDownScaler();
             }
+            iLinkQuantity--;
         }
+
+        
     }
+
+    public int i = 0;
 
     void TetherRenderer()
     {
         lrLineRenderer.positionCount = iLinkQuantity+2;
-
-        int i = 0;
+        i = 0;
 
         lrLineRenderer.SetPosition(i, goPlayer1.transform.position);
 
-        for (i = 1; i < a_goTetherLinks.Count+1; i++)
+        for (i = 1; i < a_goTetherLinks.Count; i++)
         {
             if (a_goTetherLinks[i - 1] != null)
             {
@@ -158,4 +146,12 @@ public class TetherManager : MonoBehaviour
         tmp.connectedAnchor = new Vector3(goPlayer2.GetComponent<CircleCollider2D>().radius + fLinkDistance, 0, 0);
     }
 
+    public List<GameObject> GetLinkList()
+    {
+        return a_goTetherLinks;
+    }
+    public void SetLinkList(List<GameObject> p_a_goLinkList)
+    {
+        a_goTetherLinks = p_a_goLinkList;
+    }
 }
